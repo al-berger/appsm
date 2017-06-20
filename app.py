@@ -142,7 +142,7 @@ def get_home_dir():
 	else:
 		return ":"  # No home directory
 
-def get_conf_dir():
+def get_conf_dir( create = False ):
 	'''Return the name of directory for configuration files.'''
 	global confdir, homedir
 
@@ -152,12 +152,13 @@ def get_conf_dir():
 	if not homedir:
 		homedir = get_home_dir()
 
-	if homedir == "-":
+	if homedir == ":":
 		return None
 
 	confhome = os.getenv( "XDG_CONFIG_HOME", homedir + "/.config" )
+	if create:
+		os.makedirs( confhome + "/" + APPNAME, mode = 0o777, exist_ok = True )
 	return confhome + "/" + APPNAME
-
 
 def read_conf( cnf ):
 	'''Read configuration from files in standard locations.'''
