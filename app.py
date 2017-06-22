@@ -160,22 +160,23 @@ def get_conf_dir( create = False ):
 		os.makedirs( confhome + "/" + APPNAME, mode = 0o777, exist_ok = True )
 	return confhome + "/" + APPNAME
 
-def read_conf( cnf ):
+def read_conf( cnf, flat=True ):
 	'''Read configuration from files in standard locations.'''
 	cp = ConfigParser( interpolation = ExtendedInterpolation(), delimiters = '=' )
 	cp.optionxform = str
 	# First reading system-wide settings
 	CONFFILE = "/etc/{0}/{0}.conf".format( APPNAME )
-	if os.path.exists( CONFFILE ):
+	if os.path.isfile( CONFFILE ):
 		cp.read( CONFFILE )
 
 	CONFFILE = confdir + "/{0}.conf".format( APPNAME )
-	if os.path.exists( CONFFILE ):
+	if os.path.isfile( CONFFILE ):
 		cp.read( CONFFILE )
 
-	for sec in cp.sections():
-		for nam, val in cp.items( sec ):
-			cnf[nam] = val
+	if flat:
+		for sec in cp.sections():
+			for nam, val in cp.items( sec ):
+				cnf[nam] = val
 
 def clc( s ):
 	'''Convert to command line form.'''
