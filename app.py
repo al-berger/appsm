@@ -177,6 +177,8 @@ def read_conf( cnf, flat=True ):
 		for sec in cp.sections():
 			for nam, val in cp.items( sec ):
 				cnf[nam] = val
+	else:
+		cnf = cp
 
 def clc( s ):
 	'''Convert to command line form.'''
