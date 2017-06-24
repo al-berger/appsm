@@ -161,7 +161,10 @@ def get_conf_dir( create = False ):
 	return confhome + "/" + APPNAME
 
 def read_conf( cnf, flat=True ):
-	'''Read configuration from files in standard locations.'''
+	'''Read configuration from files in standard locations.
+		If 'flat' is True, cnf can be a dictionary. Otherwise
+		cnf should be a ConfigParser object.
+	'''
 	cp = ConfigParser( interpolation = ExtendedInterpolation(), delimiters = '=' )
 	cp.optionxform = str
 	# First reading system-wide settings
@@ -178,7 +181,7 @@ def read_conf( cnf, flat=True ):
 			for nam, val in cp.items( sec ):
 				cnf[nam] = val
 	else:
-		cnf = cp
+		cnf.read_dict( cp )
 
 def clc( s ):
 	'''Convert to command line form.'''
